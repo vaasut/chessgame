@@ -1,0 +1,185 @@
+<html>
+
+<head>
+	<meta charset = "utf-8">
+	<title> Chess </title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
+
+	<script src = "./piece.js"></script>
+	<script src = "./pawn.js"></script>
+	<script src = "./knight.js"></script>
+	<script src = "./bishop.js"></script>
+	<script src = "./rook.js"></script>
+	<script src = "./queen.js"></script>
+	<script src = "./king.js"></script>
+	<script src = "./initgame.js"></script>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.css">   
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.js"></script>
+
+</head>
+
+<body>
+	<!-- <button id="keyboard"> Key Commands Not Working? </button>  -->
+	<center> <canvas id="myCanvas" width="560" height="560" style="border:1px solid #000000;"> </canvas>
+</body>
+
+<script>
+
+
+
+function drawGrid(){
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	let odd = 1;
+	ctx.moveTo(0,0);
+	for (x = 0; x < 560; x += 70){
+		for (y =0; y < 560; y += 70){
+			if (odd == 1){
+				ctx.fillStyle = "lightblue";
+			}
+			else{
+				ctx.fillStyle = "tan";
+			}
+			odd *= -1;
+			ctx.fillRect(x,y,x+70,y+70);
+		}
+		odd *= -1;	
+	}
+}
+
+drawGrid();
+drawPieces();
+
+var canvas_left = document.getElementById("myCanvas").offsetLeft;
+var canvas_top = document.getElementById("myCanvas").offsetTop;
+console.log(canvas_left);
+console.log(canvas_top);
+
+
+var click = 0;
+var piece = whiteKing;
+var moves;
+
+document.onmousemove = function(e){
+	if (click == 0){
+		var cursorX = e.pageX - canvas_left;
+		var cursorY = e.pageY - canvas_top;
+		// console.log(cursorX);
+		// console.log(cursorY);
+		drawGrid();
+		getSquare(cursorX,cursorY);
+		drawPieces();
+	}
+}
+
+document.onclick = function(e){
+	//console.log("click: " + click)
+	if (click == 0){
+		click = 1;
+		var cursorX = e.pageX - canvas_left;
+		var cursorY = e.pageY - canvas_top;
+		drawGrid();
+		if (cursorX < 0 || cursorX > 560 || cursorY < 0 || cursorY > 560){
+			click = 0;
+			drawPieces();
+		}
+
+		else{
+			let x = Math.floor(cursorX / 70);
+			let y = Math.floor(cursorY / 70);
+			if (game[7-y][x]){
+				piece = game[7-y][x];
+			}
+			else{
+				click = 0;
+				drawPieces();
+				return;
+			}
+			//moves = [[4,4],[4,5],[4,6],[3,6]];
+			moves = piece.getmoves(game)
+			getSquare(cursorX,cursorY);
+			drawPotentialMoves(cursorX,cursorY)
+			drawPieces();
+		}
+	}
+	else if (click == 1){
+		click = 0;
+		var cursorX = e.pageX - canvas_left;
+		var cursorY = e.pageY - canvas_top;
+		let x = Math.floor(cursorX / 70);
+		let y = Math.floor(cursorY / 70);
+		for (i in moves){
+			if (moves[i][1] == x && moves[i][0] == y){ //valid move
+				game[piece.rank][piece.file] = "";
+				game[7-y][x] = piece;
+				piece.file = x;
+				piece.rank = 7-y;
+				piece.updatestate()
+				//console.log("rank: " + piece.rank);
+				//console.log("file: " + piece.file);
+			}
+		}
+		drawGrid();
+		drawPieces();
+	}
+}
+
+
+function drawPotentialMoves(cursorX,cursorY){
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	for (i in moves){
+		ctx.fillStyle = "#ff99cc";
+		ctx.fillRect(moves[i][1]*70,moves[i][0]*70,moves[i][1]+70,moves[i][0]+70);
+	}
+}
+
+function getSquare(cursorX,cursorY){
+	let x = Math.floor(cursorX / 70);
+	let y = Math.floor(cursorY / 70);
+	// console.log(x);
+	// console.log(y);
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d"); 
+	if (click == 0){
+		ctx.fillStyle = "#99ffcc";
+		ctx.fillRect(x*70,y*70,x+70,y+70);
+	}
+	if (click == 1){
+		ctx.fillStyle = "#ff99cc";
+		ctx.fillRect(x*70,y*70,x+70,y+70);
+	}
+}
+
+
+function drawPieces(){
+	let file = 0;
+	let rank = 0;
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	for (y = 490; y >= 0; y -= 70){
+		for (x = 0;  x < 560; x += 70){
+			ctx.font = "24px Arial";
+			if (game[file][rank]){
+				if (game[file][rank].color == 1){
+					ctx.fillStyle = "black"
+				}
+				else{
+					ctx.fillStyle = "blue"
+				}
+				ctx.fillText(game[file][rank].rank,x+30,y+40)
+			}
+			rank += 1;
+		}
+		rank = 0;
+		file += 1;
+	}
+}
+
+
+
+
+
+
+</script>
