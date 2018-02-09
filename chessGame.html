@@ -109,19 +109,26 @@ document.onclick = function(e){
 		var cursorY = e.pageY - canvas_top;
 		let x = Math.floor(cursorX / 70);
 		let y = Math.floor(cursorY / 70);
-		for (i in moves){
-			if (moves[i][1] == x && moves[i][0] == y){ //valid move
-				game[piece.rank][piece.file] = "";
-				game[7-y][x] = piece;
-				piece.file = x;
-				piece.rank = 7-y;
-				piece.updatestate()
-				//console.log("rank: " + piece.rank);
-				//console.log("file: " + piece.file);
-			}
+		if (cursorX < 0 || cursorX > 560 || cursorY < 0 || cursorY > 560){
+			click = 0;
+			drawGrid();
+			drawPieces();
 		}
-		drawGrid();
-		drawPieces();
+		else{
+			for (i in moves){
+				if (moves[i][1] == x && moves[i][0] == y){ //valid move
+					game[piece.rank][piece.file] = "";
+					game[7-y][x] = piece;
+					piece.file = x;
+					piece.rank = 7-y;
+					piece.updatestate()
+					//console.log("rank: " + piece.rank);
+					//console.log("file: " + piece.file);
+				}
+			}
+			drawGrid();
+			drawPieces();
+		}
 	}
 }
 
