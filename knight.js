@@ -22,7 +22,7 @@ class Knight extends Piece {
 
 		for (let i in moves){
 			let move = moves[i];
-			console.log("x: "+ move[0]);
+			//console.log("x: "+ move[0]);
 			if (move[0] > -1 && move[0] < 8 && move[1] > -1 && move[1] < 8){
 				if (game[7-move[0]][move[1]] === undefined){
 					corrected_moves.push(moves[i]);

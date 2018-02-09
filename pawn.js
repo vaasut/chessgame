@@ -11,7 +11,7 @@ class Pawn extends Piece {
 	}
 	getmoves(game){
 		moves = []
-		if (this.color == 0){
+		if (this.color == -1){
 			if (this.state == 0){ //unmoved
 				if (game[this.rank+1][this.file] === "" && game[this.rank+2][this.file] === ""){
 					moves.push([7-this.rank-2,this.file]);
@@ -47,13 +47,13 @@ class Pawn extends Piece {
 			}
 			
 			if (game[this.rank-1][this.file+1]){
-				if (game[this.rank-1][this.file+1].color == 0){
+				if (game[this.rank-1][this.file+1].color == -1){
 					moves.push([7-this.rank+1,this.file+1]);
 				}
 			}
 
 			if (game[this.rank-1][this.file-1]){
-				if (game[this.rank-1][this.file-1].color == 0){
+				if (game[this.rank-1][this.file-1].color == -1){
 					moves.push([7-this.rank+1,this.file-1]);
 				}
 			}

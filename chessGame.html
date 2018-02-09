@@ -60,6 +60,7 @@ console.log(canvas_top);
 var click = 0;
 var piece = whiteKing;
 var moves;
+var turn = -1;
 
 document.onmousemove = function(e){
 	if (click == 0){
@@ -91,7 +92,7 @@ document.onclick = function(e){
 			if (game[7-y][x]){
 				piece = game[7-y][x];
 			}
-			else{
+			else {
 				click = 0;
 				drawPieces();
 				return;
@@ -114,7 +115,7 @@ document.onclick = function(e){
 			drawGrid();
 			drawPieces();
 		}
-		else{
+		else if (turn == piece.color){
 			for (i in moves){
 				if (moves[i][1] == x && moves[i][0] == y){ //valid move
 					game[piece.rank][piece.file] = "";
@@ -122,6 +123,7 @@ document.onclick = function(e){
 					piece.file = x;
 					piece.rank = 7-y;
 					piece.updatestate()
+					turn *= -1;
 					//console.log("rank: " + piece.rank);
 					//console.log("file: " + piece.file);
 				}
@@ -175,7 +177,7 @@ function drawPieces(){
 				else{
 					ctx.fillStyle = "blue"
 				}
-				ctx.fillText(game[file][rank].rank,x+30,y+40)
+				ctx.fillText(game[file][rank].type,x+30,y+40)
 			}
 			rank += 1;
 		}
