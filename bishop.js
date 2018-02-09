@@ -8,7 +8,7 @@ class Bishop extends Piece {
 		let moves =[];
 
 		for (let d = 1; d < 8; d++){
-			if (this.rank+d > -1 && this.rank+d < 8 && this.file+d > -1 && this.file+d < 8){
+			if (this.rank+d < 8 && this.file+d < 8){
 				moves.push([7-(this.rank+d),this.file+d]);
 				if (game[this.rank+d][this.file+d] !== ""){
 					//console.log("test: " + game[this.rank+d][this.file+d].rank);
@@ -19,7 +19,7 @@ class Bishop extends Piece {
 		}
 
 		for (let e = -1; e > -8; e--){
-			if (this.rank+e > -1 && this.rank+e < 8 && this.file+e > -1 && this.file+e < 8){
+			if (this.rank+e > -1 && this.file+e > -1){
 				moves.push([7-(this.rank+e),this.file+e]);
 				if (game[this.rank+e][this.file+e] !== ""){
 					//console.log("test: " + game[this.rank+e][this.file+e].rank);
@@ -29,7 +29,7 @@ class Bishop extends Piece {
 		}
 
 		for (let f = 1; f < 8; f++){
-			if (this.rank+f > -1 && this.rank+f < 8 && this.file-f > -1 && this.file-f < 8){
+			if (this.rank+f < 8 && this.file-f > -1){
 				moves.push([7-(this.rank+f),this.file-f]);
 				if (game[this.rank+f][this.file-f] !== ""){
 					//console.log("test: " + game[this.rank+f][this.file-f].rank);
@@ -38,7 +38,7 @@ class Bishop extends Piece {
 			}
 		}
 		for (let g = 1; g < 8; g++){
-			if (this.rank-g > -1 && this.rank-g < 8 && this.file+g > -1 && this.file+g < 8){
+			if (this.rank-g > -1 && this.file+g < 8){
 				moves.push([7-(this.rank-g),this.file+g]);
 				if (game[this.rank-g][this.file+g] !== ""){
 					//console.log("test: " + game[this.rank+f][this.file-f].rank);
