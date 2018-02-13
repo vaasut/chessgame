@@ -37,6 +37,7 @@ class Pawn extends Piece {
 		}
 		else{
 			if (this.state == 0){ //unmoved
+				//console.log(this);
 				if (game[this.rank-1][this.file] === "" && game[this.rank-2][this.file] === ""){
 					moves.push([7-this.rank+2,this.file]);
 				}

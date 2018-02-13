@@ -98,7 +98,8 @@ document.onclick = function(e){
 				return;
 			}
 			//moves = [[4,4],[4,5],[4,6],[3,6]];
-			moves = piece.getmoves(game)
+			moves = piece.getmoves(game);
+			
 			getSquare(cursorX,cursorY);
 			drawPotentialMoves(cursorX,cursorY)
 			drawPieces();
