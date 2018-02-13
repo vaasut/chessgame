@@ -23,7 +23,7 @@ class King extends Piece {
 			for (let b = 0; b < 8; b++){
 				if (game[a][b] !== ""){
 					if (game[a][b].color != this.color){
-						if (game[a][b].type != "K"){
+						if (game[a][b].type != "K"){ //stop the infinite
 							let piece = game[a][b];
 							if (piece.type === "P"){
 								//special rules for pawns
@@ -36,7 +36,7 @@ class King extends Piece {
 									opponent_attacks.push([7-piece.rank+1,piece.file-1]);
 								}
 							}
-							else{
+							else{ //other pieces attacked squares are their moves
 								opponent_attacks =  opponent_attacks.concat(piece.getmoves(game))
 							}
 						}
@@ -79,6 +79,43 @@ class King extends Piece {
 		}
 
 		return allowed_moves;
+	}
+	incheck(game){
+		let opponent_attacks = []
+		for (let a = 0; a < 8; a++){
+			for (let b = 0; b < 8; b++){
+				if (game[a][b] !== ""){
+					if (game[a][b].color != this.color){
+						if (game[a][b].type != "K"){ //stop the infinite
+							let piece = game[a][b];
+							if (piece.type === "P"){
+								//special rules for pawns
+								if (piece.color === -1){
+									opponent_attacks.push([7-piece.rank-1,piece.file+1]);
+									opponent_attacks.push([7-piece.rank-1,piece.file-1]);
+									}
+								else{
+									opponent_attacks.push([7-piece.rank+1,piece.file+1]);
+									opponent_attacks.push([7-piece.rank+1,piece.file-1]);
+								}
+							}
+							else{ //other pieces attacked squares are their moves
+								opponent_attacks =  opponent_attacks.concat(piece.getmoves(game))
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for (let i in opponent_attacks){
+			if (opponent_attacks[i][0] === 7-this.rank && opponent_attacks[i][1] === this.file){
+					//console.log("King in check");
+					return true;
+				}
+		}
+
+
 	}
 }
 

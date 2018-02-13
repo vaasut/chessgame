@@ -26,6 +26,8 @@
 
 <script>
 
+var color0 = "lightblue";
+var color1 = "tan";
 
 
 function drawGrid(){
@@ -36,10 +38,10 @@ function drawGrid(){
 	for (x = 0; x < 560; x += 70){
 		for (y =0; y < 560; y += 70){
 			if (odd == 1){
-				ctx.fillStyle = "lightblue";
+				ctx.fillStyle = color0;
 			}
 			else{
-				ctx.fillStyle = "tan";
+				ctx.fillStyle = color1;
 			}
 			odd *= -1;
 			ctx.fillRect(x,y,x+70,y+70);
@@ -61,6 +63,8 @@ var click = 0;
 var piece = whiteKing;
 var moves;
 var turn = -1;
+var check = 0;
+
 
 document.onmousemove = function(e){
 	if (click == 0){
@@ -119,12 +123,41 @@ document.onclick = function(e){
 		else if (turn == piece.color){
 			for (i in moves){
 				if (moves[i][1] == x && moves[i][0] == y){ //valid move
+					let temp_moved = game[piece.rank][piece.file];
+					let temp_moved_state = game[piece.rank][piece.file].state;
+					let temp_attacked = game[7-y][x];
+
+					let pieceRank = piece.rank;
+					let pieceFile = piece.file;
+
 					game[piece.rank][piece.file] = "";
 					game[7-y][x] = piece;
 					piece.file = x;
 					piece.rank = 7-y;
 					piece.updatestate()
 					turn *= -1;
+					if (check === 1 && whiteKing.incheck(game) ||
+						check === -1 && blackKing.incheck(game)) {
+						console.log("White King still in check... undo move");
+						temp_moved.file = pieceFile;
+						temp_moved.rank = pieceRank;
+						temp_moved.state = temp_moved_state;
+						game[pieceRank][pieceFile] = temp_moved;
+						game[7-y][x] = temp_attacked;
+						turn *= -1;
+					}
+
+					else if (whiteKing.incheck(game)){
+						check = 1;
+						console.log('white king in check');
+					}
+					else if (blackKing.incheck(game)){
+						check = -1;
+						console.log('black king in check');
+					}
+					else{
+						check = 0;
+					}
 					//console.log("rank: " + piece.rank);
 					//console.log("file: " + piece.file);
 				}
